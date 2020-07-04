@@ -1,0 +1,39 @@
+package com.sts.eventmgmt.controllers;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.sts.eventmgmt.controllers.exceptions.AlreadyCheckInException;
+import com.sts.eventmgmt.entities.Event;
+import com.sts.eventmgmt.entities.Participant;
+import com.sts.eventmgmt.repos.ParticipantRepository;
+
+@RepositoryRestController
+@RequestMapping("/events")
+public class CheckInController {
+	
+	@Autowired
+	private ParticipantRepository participantRepository;
+	@PostMapping("/checkin/{id}")
+	public ResponseEntity<Event> checkIn(@PathVariable Long id) {
+	
+		Optional<Participant> participantOptional = participantRepository.findById(id);
+		Participant participant = participantOptional.get();
+		if(participantOptional.isPresent()) {
+
+			if(participant.getCheckedIn()) {
+				throw new AlreadyCheckInException();
+			}
+		}
+		participant.setCheckedIn(true);
+		participantRepository.save(participant);
+		return null;
+	}
+
+}

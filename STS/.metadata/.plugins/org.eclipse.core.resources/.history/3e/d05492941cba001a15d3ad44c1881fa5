@@ -1,0 +1,5 @@
+package com.sts.eventmgmt.controllers;
+
+public class CheckInController {
+
+}
