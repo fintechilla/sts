@@ -1,5 +1,0 @@
-package com.sts.eventmgmt.controllers.exceptions;
-
-public class AlreadyCheckInException extends RuntimeException {
-
-}
